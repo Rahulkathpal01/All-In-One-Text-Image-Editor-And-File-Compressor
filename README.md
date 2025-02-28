@@ -1,3 +1,3 @@
-# All-In-One-File-and-Text-Editor
+# All-In-One-Text-Image-Editor-And-File-Compressor
 <br>
 Author-Rahul
