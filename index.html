@@ -5,61 +5,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All in One Editor</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
-            background: url('https://pixlr.com/images/index/product-image-one.webp') no-repeat center center fixed;
-            background-size: cover;
-            font-family: 'Josefin Sans', sans-serif;
+            font-family: 'Poppins', sans-serif;
+            background: #f4f4f9;
+            color: #333;
             text-align: center;
-            color: white;
-            padding-top: 50px;
+            padding: 50px 20px;
         }
         .container {
-            background: rgba(0, 0, 0, 0.6);
+            max-width: 800px;
+            margin: auto;
             padding: 40px;
+            background: white;
             border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
         h1 {
             font-size: 2.5rem;
-            margin-bottom: 30px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            color: #666;
         }
         .btn-custom {
-            width: 220px;
-            padding: 12px;
-            font-size: 18px;
-            font-weight: bold;
-            margin: 15px;
-            border-radius: 8px;
-            transition: all 0.3s ease-in-out;
-            background-color: #ff9800;
+            display: inline-block;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            background: #667eea;
             color: white;
             border: none;
+            margin: 10px;
+            text-decoration: none;
         }
-        .btn-custom:hover { 
-            background-color: #e68900; 
-            transform: scale(1.1); 
+        .btn-custom:hover {
+            background: #764ba2;
+            transform: scale(1.05);
+        }
+        .feature-section {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        .feature {
+            width: 45%;
+            margin: 10px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .feature h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #764ba2;
+        }
+        .feature p {
+            font-size: 1rem;
+            color: #555;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>ALL IN ONE EDITOR & COMPRESSOR</h1>
-        <div class="row justify-content-center">
-            <div class="col-md-5 text-center">
-                <a href="./Huffman_Compressor/index.html"><button class="btn btn-custom">Huffman Compressor</button></a>
+        <h1>All in One Editor</h1>
+        <p>The ultimate suite for text editing, image editing, file compression, and gaming—all in one place.</p>
+        <div class="feature-section">
+            <div class="feature">
+                <h3>Text Editor</h3>
+                <p>Edit and format your text with ease using our powerful text editor.</p>
+                <a href="./textEditor.html" class="btn-custom">Open Text Editor</a>
             </div>
-            <div class="col-md-5 text-center">
-                <a href="./textEditor.html"><button class="btn btn-custom">Text Editor</button></a>
+            <div class="feature">
+                <h3>Image Editor</h3>
+                <p>Enhance and edit your photos with our intuitive image editing tools.</p>
+                <a href="./Photo-Editor/index.html" class="btn-custom">Open Image Editor</a>
             </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-md-5 text-center">
-                <a href="./Photo-Editor/index.html"><button class="btn btn-custom">Photo Editor</button></a>
+            <div class="feature">
+                <h3>File Compressor</h3>
+                <p>Compress your files efficiently without losing quality.</p>
+                <a href="./Huffman_Compressor/index.html" class="btn-custom">Open File Compressor</a>
             </div>
-            <div class="col-md-5 text-center">
-                <a href="./Snake Game/index.html"><button class="btn btn-custom">Fun Game</button></a>
+            <div class="feature">
+                <h3>Play Game</h3>
+                <p>Take a break and enjoy a fun gaming experience.</p>
+                <a href="./Snake Game/index.html" class="btn-custom">Play Game</a>
             </div>
         </div>
     </div>
