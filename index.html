@@ -7,99 +7,218 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #2A2356;
+            --secondary: #483D8B;
+            --accent: #00CED1;
+            --highlight: #FF69B4;
+            --text: #F8F8FF;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
-            background: #f4f4f9;
-            color: #333;
+            background: var(--primary);
+            color: var(--text);
             text-align: center;
             padding: 50px 20px;
+            position: relative;
+            overflow-x: hidden;
         }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.5) 100%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: auto;
             padding: 40px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            background: rgba(42, 35, 86, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--accent);
+            animation: fadeIn 1s ease-out;
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 600;
-            margin-bottom: 20px;
-            color: #667eea;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, var(--accent), var(--highlight));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 15px rgba(0, 206, 209, 0.2);
+            animation: slideUp 0.8s ease-out;
         }
+
         p {
-            font-size: 1.1rem;
-            margin-bottom: 40px;
-            color: #666;
+            font-size: 1.2rem;
+            margin-bottom: 50px;
+            color: #D3D3D3;
+            line-height: 1.6;
         }
-        .btn-custom {
-            display: inline-block;
-            padding: 12px 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-            background: #667eea;
-            color: white;
-            border: none;
-            margin: 10px;
-            text-decoration: none;
-        }
-        .btn-custom:hover {
-            background: #764ba2;
-            transform: scale(1.05);
-        }
+
         .feature-section {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
         }
+
         .feature {
-            width: 45%;
-            margin: 10px;
-            padding: 20px;
-            background: #f9f9f9;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            background: rgba(72, 61, 139, 0.3);
+            border-radius: 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+            animation: cardEntry 0.6s ease-out backwards;
         }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            background: rgba(72, 61, 139, 0.5);
+            box-shadow: 0 8px 25px rgba(0, 206, 209, 0.2);
+            border-color: var(--accent);
+        }
+
+        .feature::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .feature:hover::before {
+            left: 100%;
+        }
+
         .feature h3 {
             font-size: 1.5rem;
-            font-weight: 600;
             margin-bottom: 15px;
-            color: #764ba2;
+            color: var(--accent);
         }
+
         .feature p {
             font-size: 1rem;
-            color: #555;
+            color: #D3D3D3;
+            margin-bottom: 20px;
+        }
+
+        .btn-custom {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(45deg, var(--accent), var(--highlight));
+            color: white;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-custom:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 206, 209, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            p {
+                font-size: 1rem;
+            }
+            
+            .feature {
+                padding: 20px;
+            }
+        }
+
+        @keyframes cardEntry {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>All in One Editor</h1>
-        <p>The ultimate suite for text editing, image editing, file compression, and gaming—all in one place.</p>
+        <p>The ultimate creative suite combining powerful editing tools with immersive gaming experiences. Transform your content with our advanced text and image editors, optimize files with smart compression, and unwind with curated games.</p>
+        
         <div class="feature-section">
-            <div class="feature">
-                <h3>Text Editor</h3>
-                <p>Edit and format your text with ease using our powerful text editor.</p>
-                <a href="./textEditor.html" class="btn-custom">Open Text Editor</a>
+            <div class="feature" style="animation-delay: 0.2s">
+                <h3>📝 Text Editor</h3>
+                <p>Advanced text manipulation with real-time collaboration and AI-powered suggestions</p>
+                <a href="./textEditor.html" class="btn-custom">Get Started</a>
             </div>
-            <div class="feature">
-                <h3>Image Editor</h3>
-                <p>Enhance and edit your photos with our intuitive image editing tools.</p>
-                <a href="./Photo-Editor/index.html" class="btn-custom">Open Image Editor</a>
+            
+            <div class="feature" style="animation-delay: 0.4s">
+                <h3>🎨 Image Editor</h3>
+                <p>Professional-grade photo editing with AI enhancements and creative filters</p>
+                <a href="./Photo-Editor/index.html" class="btn-custom">Edit Images</a>
             </div>
-            <div class="feature">
-                <h3>File Compressor</h3>
-                <p>Compress your files efficiently without losing quality.</p>
-                <a href="./Huffman_Compressor/index.html" class="btn-custom">Open File Compressor</a>
+            
+            <div class="feature" style="animation-delay: 0.6s">
+                <h3>📦 File Compressor</h3>
+                <p>Smart compression algorithms that maintain quality while reducing file sizes</p>
+                <a href="./Huffman_Compressor/index.html" class="btn-custom">Compress Now</a>
             </div>
-            <div class="feature">
-                <h3>Play Game</h3>
-                <p>Take a break and enjoy a fun gaming experience.</p>
-                <a href="./Snake Game/index.html" class="btn-custom">Play Game</a>
+            
+            <div class="feature" style="animation-delay: 0.8s">
+                <h3>🎮 Play Game</h3>
+                <p>Curated selection of immersive games to boost creativity and relaxation</p>
+                <a href="./Snake Game/index.html" class="btn-custom">Play Now</a>
             </div>
         </div>
     </div>
