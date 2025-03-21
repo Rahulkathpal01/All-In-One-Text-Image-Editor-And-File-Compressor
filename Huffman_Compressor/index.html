@@ -1,53 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Huffman Visualizer</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet>
+    <style>
+        :root {
+            --primary: #2A2356;
+            --secondary: #483D8B;
+            --accent: #00CED1;
+            --highlight: #FF69B4;
+            --text: #F8F8FF;
+        }
 
-    <link rel="stylesheet" href="style.css">
-    <script src="heap.js"></script>
-    <script src="huffman.js" type="module"></script>
-    <script src="script.js" type="module"></script>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(42, 35, 86, 0.9) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--accent);
+        }
+
+        #container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 2rem auto;
+        }
+
+        .text_box {
+            background: rgba(72, 61, 139, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            height: 60vh;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .text_box:hover {
+            border-color: var(--accent);
+            box-shadow: 0 8px 25px rgba(0, 206, 209, 0.2);
+        }
+
+        .drop-zone {
+            border: 2px dashed var(--accent);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            margin: 1rem auto;
+            max-width: 400px;
+        }
+
+        .drop-zone.dragover {
+            background: rgba(0, 206, 209, 0.1);
+            transform: scale(1.02);
+        }
+
+        .btn-custom {
+            background: linear-gradient(45deg, var(--accent), var(--highlight));
+            border: none;
+            border-radius: 8px;
+            padding: 12px 30px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 206, 209, 0.4);
+        }
+
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+            margin: 1rem auto;
+        }
+
+        .tree-node {
+            fill: var(--accent);
+            transition: all 0.3s ease;
+        }
+
+        .tree-node:hover {
+            fill: var(--highlight);
+            transform: scale(1.1);
+        }
+
+        .stats-card {
+            background: rgba(72, 61, 139, 0.5);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+    </style>
 </head>
-
 <body>
-    <nav class="navbar navbar-light " style="font-size: 25px; font-family: sans-serif; background-color: whitesmoke;">
-
-        <!-- <img src="https://codingblocks.com/assets/images/cb/cblogo.png" width="124" height="45"
-            class="d-inline-block align-top" alt=""> -->
-        Huffman EnDec Project
+    <nav class="navbar navbar-light">
+        <span class="navbar-brand mb-0 h1">🌿 Huffman Visualizer</span>
     </nav>
+
     <div id="container">
-        <!-- left part ( With Scrool Bar )-->
-        <div class="text_box" style="overflow-y: scroll">
-            <span id="treearea" style="width: 100%; text-align: center; font-size: medium;">
-                Tree Structure Will Be Displayed Here !!
-            </span>
+        <!-- Visualization Panel -->
+        <div class="text_box">
+            <div class="drop-zone" id="dropZone">
+                📁 Drag & Drop Files or Click to Upload
+                <input type="file" id="uploadedFile" hidden>
+            </div>
+            <svg id="treeVisualization" width="100%" height="80%"></svg>
         </div>
 
-        <!--Right part ( With Scrool Bar ) -->
-        <div class="text_box" style="overflow-y: scroll">
-            <span id="temptext" style="width: 100%; text-align: center; font-size: x-large;">
-                Operation info will be shown here !!
-            </span>
+        <!-- Info Panel -->
+        <div class="text_box">
+            <div class="stats-card">
+                <h5>📈 Compression Stats</h5>
+                <div id="compressionStats"></div>
+            </div>
+            <div class="stats-card">
+                <h5>⏳ Recent Operations</h5>
+                <div id="operationHistory"></div>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-custom my-2" id="encode">Encode</button>
+                <button class="btn btn-custom my-2" id="decode">Decode</button>
+            </div>
         </div>
     </div>
 
-    <div>
-        <form method="post" enctype="multipart/form-data" style="display: inline-block;">
-            <!-- To take the file from the User ( Upload File ) -->
-            <input type="file" id="uploadedFile"/>
-        </form>
-        <br>
-        <!-- Encode & Decode Buttons -->
-        <button type="button" class="btn btn-success center_buttons" id="encode">&nbsp;&nbsp;Encode&nbsp;&nbsp;</button>
-        <br>
-        <button type="button" class="btn btn-danger center_buttons" id="decode">&nbsp;&nbsp;Decode&nbsp;&nbsp;</button>
-    </div>
+    <script>
+        // Drag & Drop Handling
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('uploadedFile');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            fileInput.files = e.dataTransfer.files;
+        });
+
+        // Tree Visualization
+        function drawTree(data) {
+            const svg = d3.select("#treeVisualization");
+            svg.selectAll("*").remove();
+
+            const treeLayout = d3.tree().size([600, 400]);
+            const root = d3.hierarchy(data);
+            treeLayout(root);
+
+            const nodes = svg.selectAll(".node")
+                .data(root.descendants())
+                .enter().append("g")
+                .attr("class", "node")
+                .attr("transform", d => `translate(${d.x},${d.y})`);
+
+            nodes.append("circle")
+                .attr("class", "tree-node")
+                .attr("r", 10);
+
+            nodes.append("text")
+                .text(d => d.data.name)
+                .attr("dx", 15)
+                .attr("dy", 5)
+                .style("fill", "white");
+
+            const links = svg.selectAll(".link")
+                .data(root.links())
+                .enter().append("path")
+                .attr("class", "link")
+                .attr("d", d3.linkVertical()
+                    .x(d => d.x)
+                    .y(d => d.y))
+                .style("fill", "none")
+                .style("stroke", "var(--accent)");
+        }
+
+        // Progress Animation
+        function updateProgress(percent) {
+            const circle = document.querySelector('.progress-ring__circle');
+            const radius = circle.r.baseVal.value;
+            const circumference = radius * 2 * Math.PI;
+            
+            circle.style.strokeDasharray = `${circumference} ${circumference}`;
+            circle.style.strokeDashoffset = circumference - (percent / 100) * circumference;
+        }
+
+        // Event Listeners
+        document.getElementById('encode').addEventListener('click', async () => {
+            // Add encoding logic here
+            updateProgress(75); // Example progress
+        });
+
+        document.getElementById('decode').addEventListener('click', async () => {
+            // Add decoding logic here
+            updateProgress(50); // Example progress
+        });
+
+        // Initial Demo Tree
+        drawTree({
+            name: "Root",
+            children: [
+                { name: "Child 1", children: [{ name: "Leaf 1" }, { name: "Leaf 2" }] },
+                { name: "Child 2", children: [{ name: "Leaf 3" }] }
+            ]
+        });
+    </script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </body>
-
 </html>
