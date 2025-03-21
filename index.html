@@ -8,35 +8,39 @@
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@700&display=swap" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(to right, #6a11cb, #2575fc);
+            background: url('https://source.unsplash.com/1600x900/?technology,abstract') no-repeat center center fixed;
+            background-size: cover;
             font-family: 'Josefin Sans', sans-serif;
             text-align: center;
             color: white;
             padding-top: 50px;
         }
         .container {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.6);
             padding: 40px;
             border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
         h1 {
             font-size: 2.5rem;
             margin-bottom: 30px;
         }
         .btn-custom {
-            width: 200px;
+            width: 220px;
             padding: 12px;
             font-size: 18px;
             font-weight: bold;
             margin: 15px;
             border-radius: 8px;
             transition: all 0.3s ease-in-out;
+            background-color: #ff9800;
+            color: white;
+            border: none;
         }
-        .btn-warning:hover { background-color: #ffcc00; transform: scale(1.1); }
-        .btn-dark:hover { background-color: #444; transform: scale(1.1); }
-        .btn-primary:hover { background-color: #007bff; transform: scale(1.1); }
-        .btn-success:hover { background-color: #28a745; transform: scale(1.1); }
+        .btn-custom:hover { 
+            background-color: #e68900; 
+            transform: scale(1.1); 
+        }
     </style>
 </head>
 <body>
@@ -44,18 +48,18 @@
         <h1>ALL IN ONE EDITOR & COMPRESSOR</h1>
         <div class="row justify-content-center">
             <div class="col-md-5 text-center">
-                <a href="./Huffman_Compressor/index.html"><button class="btn btn-warning btn-custom">Huffman Compressor</button></a>
+                <a href="./Huffman_Compressor/index.html"><button class="btn btn-custom">Huffman Compressor</button></a>
             </div>
             <div class="col-md-5 text-center">
-                <a href="./textEditor.html"><button class="btn btn-dark btn-custom">Text Editor</button></a>
+                <a href="./textEditor.html"><button class="btn btn-custom">Text Editor</button></a>
             </div>
         </div>
         <div class="row justify-content-center">
             <div class="col-md-5 text-center">
-                <a href="./Photo-Editor/index.html"><button class="btn btn-primary btn-custom">Photo Editor</button></a>
+                <a href="./Photo-Editor/index.html"><button class="btn btn-custom">Photo Editor</button></a>
             </div>
             <div class="col-md-5 text-center">
-                <a href="./Snake Game/index.html"><button class="btn btn-success btn-custom">Fun Game</button></a>
+                <a href="./Snake Game/index.html"><button class="btn btn-custom">Fun Game</button></a>
             </div>
         </div>
     </div>
