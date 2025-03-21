@@ -3,232 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huffman Text File Compressor</title>
+    <title>Huffman EnDec Project</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #2c3e50;
             --secondary: #3498db;
-            --background: #ecf0f1;
-            --error: #e74c3c;
+            --background: #f8f9fa;
+            --text: #333;
+            --success: #28a745;
+            --danger: #dc3545;
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
             background: var(--background);
-            margin: 0;
-            padding: 2rem;
+            color: var(--text);
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
+        .navbar {
+            background: var(--primary) !important;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #container {
+            display: flex;
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 2rem auto;
+        }
+
+        .text_box {
+            flex: 1;
             background: white;
-            padding: 2rem;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            max-height: 60vh;
+            border: 1px solid rgba(0, 0, 0, 0.1);
         }
 
-        h1 {
+        .text_box h3 {
             color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .text_box span {
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .upload-section {
             text-align: center;
-            margin-bottom: 1.5rem;
+            margin: 2rem auto;
+            max-width: 800px;
         }
 
-        .drop-zone {
-            border: 2px dashed var(--primary);
-            padding: 2rem;
-            text-align: center;
-            margin: 1rem 0;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .upload-section input[type="file"] {
+            display: none;
         }
 
-        .drop-zone:hover {
-            background: rgba(52, 152, 219, 0.1);
-            border-color: var(--secondary);
-        }
-
-        .warning {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 1rem;
-            margin: 1rem 0;
-            color: #856404;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-
-        .stat-box {
-            background: var(--background);
-            padding: 1rem;
-            border-radius: 5px;
-            text-align: center;
-        }
-
-        button {
+        .upload-section label {
             background: var(--secondary);
             color: white;
-            border: none;
             padding: 0.8rem 1.5rem;
             border-radius: 5px;
             cursor: pointer;
             transition: all 0.3s ease;
-            width: 100%;
-            margin: 0.5rem 0;
         }
 
-        button:hover {
-            opacity: 0.9;
+        .upload-section label:hover {
+            background: #2186c4;
             transform: translateY(-2px);
         }
 
-        textarea {
-            width: 100%;
-            height: 150px;
-            padding: 1rem;
-            border: 1px solid #ddd;
+        .center_buttons {
+            margin: 1rem 0.5rem;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
             border-radius: 5px;
-            resize: vertical;
-            font-family: inherit;
+            transition: all 0.3s ease;
         }
 
-        #fileInput {
-            display: none;
+        .center_buttons:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
         }
 
-        #errorMessage {
-            color: var(--error);
-            text-align: center;
-            margin: 1rem 0;
+        .btn-success {
+            background: var(--success);
+            border: none;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            border: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Huffman Text File Compressor</h1>
-        
-        <!-- File Drop Zone -->
-        <div class="drop-zone" id="dropZone">
-            📂 Drag & Drop Text Files Here or Click to Upload
-            <input type="file" id="fileInput">
+    <!-- Navbar -->
+    <nav class="navbar navbar-light">
+        Huffman EnDec Project
+    </nav>
+
+    <!-- Main Container -->
+    <div id="container">
+        <!-- Left Panel (Tree Visualization) -->
+        <div class="text_box">
+            <h3>🌳 Huffman Tree Visualization</h3>
+            <span id="treearea">
+                Tree Structure Will Be Displayed Here !!
+            </span>
         </div>
 
-        <!-- Warning Message -->
-        <div class="warning">
-            ⚠️ This tool is optimized for <strong>text-based files</strong> (e.g., .txt, .csv, .json). 
-            It does not support binary files like PDFs, images, or videos.
+        <!-- Right Panel (Operation Info) -->
+        <div class="text_box">
+            <h3>📊 Operation Info</h3>
+            <span id="temptext">
+                Operation info will be shown here !!
+            </span>
         </div>
-
-        <!-- Text Input Section -->
-        <h2>Or Enter Text Directly</h2>
-        <textarea id="textInput" placeholder="Type or paste your text here..."></textarea>
-
-        <!-- Stats Display -->
-        <div class="stats">
-            <div class="stat-box">
-                <h3>Original Size</h3>
-                <span id="originalSize">0 KB</span>
-            </div>
-            <div class="stat-box">
-                <h3>Compressed Size</h3>
-                <span id="compressedSize">0 KB</span>
-            </div>
-            <div class="stat-box">
-                <h3>Compression Ratio</h3>
-                <span id="compressionRatio">0%</span>
-            </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <button id="compressBtn">Compress</button>
-        <button id="decompressBtn">Decompress</button>
-
-        <!-- Error Message -->
-        <div id="errorMessage"></div>
     </div>
 
-    <script>
-        // File Validation
-        const allowedTypes = [
-            'text/plain', 
-            'application/json', 
-            'text/csv'
-        ];
+    <!-- Upload & Buttons Section -->
+    <div class="upload-section">
+        <form method="post" enctype="multipart/form-data">
+            <label for="uploadedFile">📁 Upload File</label>
+            <input type="file" id="uploadedFile" />
+        </form>
+        <br>
+        <button type="button" class="btn btn-success center_buttons" id="encode">Encode</button>
+        <button type="button" class="btn btn-danger center_buttons" id="decode">Decode</button>
+    </div>
 
-        function validateFile(file) {
-            if (!allowedTypes.includes(file.type)) {
-                document.getElementById('errorMessage').textContent =
-                    'Unsupported file type. Please upload a text-based file.';
-                return false;
-            }
-            document.getElementById('errorMessage').textContent = '';
-            return true;
-        }
-
-        // File Drop Zone
-        const dropZone = document.getElementById('dropZone');
-        const fileInput = document.getElementById('fileInput');
-
-        dropZone.addEventListener('click', () => fileInput.click());
-
-        fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (validateFile(file)) {
-                console.log('File selected:', file);
-                // Add file processing logic here
-            }
-        });
-
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.style.backgroundColor = 'rgba(52, 152, 219, 0.1)';
-        });
-
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.style.backgroundColor = 'transparent';
-        });
-
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.style.backgroundColor = 'transparent';
-            const file = e.dataTransfer.files[0];
-            if (validateFile(file)) {
-                console.log('File dropped:', file);
-                // Add file processing logic here
-            }
-        });
-
-        // Text Input Compression
-        const textInput = document.getElementById('textInput');
-        const compressBtn = document.getElementById('compressBtn');
-        const decompressBtn = document.getElementById('decompressBtn');
-
-        compressBtn.addEventListener('click', () => {
-            const text = textInput.value;
-            if (!text) {
-                document.getElementById('errorMessage').textContent =
-                    'Please enter some text to compress.';
-                return;
-            }
-            console.log('Compressing text:', text);
-            // Add compression logic here
-        });
-
-        decompressBtn.addEventListener('click', () => {
-            const text = textInput.value;
-            if (!text) {
-                document.getElementById('errorMessage').textContent =
-                    'Please enter some text to decompress.';
-                return;
-            }
-            console.log('Decompressing text:', text);
-            // Add decompression logic here
-        });
-    </script>
+    <!-- Scripts -->
+    <script src="heap.js"></script>
+    <script src="huffman.js" type="module"></script>
+    <script src="script.js" type="module"></script>
 </body>
 </html>
