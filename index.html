@@ -3,224 +3,295 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All in One Editor</title>
+    <title>NexaSuite - Creative Toolkit</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2A2356;
-            --secondary: #483D8B;
-            --accent: #00CED1;
-            --highlight: #FF69B4;
-            --text: #F8F8FF;
+            --base: #F9F9F9;
+            --surface: #FFFFFF;
+            --overlay: #F2F2F2;
+            --muted: #6C757D;
+            --subtle: #495057;
+            --accent: #4A90E2;
+            --highlight: #FF6B6B;
+            --success: #50C878;
+            --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--primary);
-            color: var(--text);
-            text-align: center;
-            padding: 50px 20px;
-            position: relative;
+            font-family: 'Inter', sans-serif;
+            background: var(--base);
+            color: var(--subtle);
+            line-height: 1.6;
             overflow-x: hidden;
         }
 
-        body::before {
-            content: '';
+        .deco-wave {
             position: fixed;
+            bottom: -5vw;
+            left: 0;
+            width: 100%;
+            height: 20vw;
+            background: linear-gradient(89deg, var(--accent) 0%, var(--highlight) 100%);
+            clip-path: polygon(0 40%, 100% 0, 100% 100%, 0% 100%);
+            opacity: 0.08;
+            z-index: 0;
+        }
+
+        .container-main {
+            max-width: 1400px;
+            margin: 5rem auto;
+            padding: 4rem;
+            background: var(--surface);
+            border-radius: 2rem;
+            box-shadow: 0 1.5rem 4rem -1rem rgba(0, 0, 0, 0.08);
+            position: relative;
+            z-index: 1;
+            transform-style: preserve-3d;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 6rem;
+            perspective: 1000px;
+        }
+
+        .hero h1 {
+            font-weight: 700;
+            font-size: 4rem;
+            letter-spacing: -0.03em;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, var(--subtle), var(--muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: textReveal 0.8s 0.2s forwards;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--muted);
+            max-width: 720px;
+            margin: 0 auto 3rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: textReveal 0.8s 0.4s forwards;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            position: relative;
+        }
+
+        .tool-card {
+            padding: 2.5rem;
+            background: var(--overlay);
+            border-radius: 1.5rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transform: translateZ(0);
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.5) 100%);
+            background: linear-gradient(120deg, 
+                rgba(255,255,255,0.15) 0%,
+                rgba(255,255,255,0) 100%);
             pointer-events: none;
-            z-index: -1;
+            transition: var(--transition);
         }
 
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 40px;
-            background: rgba(42, 35, 86, 0.9);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--accent);
-            animation: fadeIn 1s ease-out;
+        .tool-card:hover {
+            transform: translateY(-0.5rem) scale(1.02);
+            box-shadow: 0 1rem 2rem -0.5rem rgba(0, 0, 0, 0.08);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .tool-card:hover::before {
+            opacity: 0.3;
         }
 
-        h1 {
-            font-size: 3rem;
-            font-weight: 600;
-            margin-bottom: 30px;
-            background: linear-gradient(45deg, var(--accent), var(--highlight));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 15px rgba(0, 206, 209, 0.2);
-            animation: slideUp 0.8s ease-out;
-        }
-
-        p {
-            font-size: 1.2rem;
-            margin-bottom: 50px;
-            color: #D3D3D3;
-            line-height: 1.6;
-        }
-
-        .feature-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-top: 40px;
-        }
-
-        .feature {
-            padding: 30px;
-            background: rgba(72, 61, 139, 0.3);
-            border-radius: 15px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid transparent;
-            position: relative;
-            overflow: hidden;
-            animation: cardEntry 0.6s ease-out backwards;
-        }
-
-        .feature:hover {
-            transform: translateY(-5px);
-            background: rgba(72, 61, 139, 0.5);
-            box-shadow: 0 8px 25px rgba(0, 206, 209, 0.2);
-            border-color: var(--accent);
-        }
-
-        .feature::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.1),
-                transparent
-            );
-            transition: 0.5s;
-        }
-
-        .feature:hover::before {
-            left: 100%;
-        }
-
-        .feature h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: var(--accent);
-        }
-
-        .feature p {
-            font-size: 1rem;
-            color: #D3D3D3;
-            margin-bottom: 20px;
-        }
-
-        .btn-custom {
-            display: inline-flex;
+        .tool-icon {
+            width: 4rem;
+            height: 4rem;
+            background: var(--surface);
+            border-radius: 1rem;
+            display: flex;
             align-items: center;
-            padding: 12px 30px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 8px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: linear-gradient(45deg, var(--accent), var(--highlight));
+            justify-content: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+
+        .tool-card:hover .tool-icon {
+            transform: rotate(-10deg) scale(1.1);
+        }
+
+        .tool-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--highlight);
             color: white;
-            border: none;
-            position: relative;
-            overflow: hidden;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 500;
         }
 
-        .btn-custom:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(0, 206, 209, 0.4);
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            padding: 2rem;
+            background: var(--overlay);
+            border-radius: 1rem;
+            margin: 4rem 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: textReveal 0.8s 0.6s forwards;
         }
 
-        @media (max-width: 768px) {
-            .container {
-                padding: 30px 20px;
-                margin: 20px;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            p {
-                font-size: 1rem;
-            }
-            
-            .feature {
-                padding: 20px;
-            }
+        .stat-item {
+            text-align: center;
         }
 
-        @keyframes cardEntry {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        @keyframes textReveal {
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
+        @media (max-width: 992px) {
+            .container-main {
+                margin: 2rem;
+                padding: 2rem;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            
+            .hero h1 {
+                font-size: 2.5rem;
             }
+            
+            .tool-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Dynamic Interaction Additions */
+        .tool-card:nth-child(odd):hover {
+            background: linear-gradient(45deg, var(--overlay), #f8f9fa);
+        }
+
+        .tool-card:nth-child(even):hover {
+            background: linear-gradient(45deg, #f8f9fa, var(--overlay));
+        }
+
+        .progress-ring {
+            position: absolute;
+            bottom: -1rem;
+            right: -1rem;
+            width: 6rem;
+            height: 6rem;
+            opacity: 0.1;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>All in One Editor</h1>
-        <p>The ultimate creative suite combining powerful editing tools with immersive gaming experiences. Transform your content with our advanced text and image editors, optimize files with smart compression, and unwind with curated games.</p>
-        
-        <div class="feature-section">
-            <div class="feature" style="animation-delay: 0.2s">
-                <h3>📝 Text Editor</h3>
-                <p>Advanced text manipulation with real-time collaboration and AI-powered suggestions</p>
-                <a href="./textEditor.html" class="btn-custom">Get Started</a>
-            </div>
+    <div class="deco-wave"></div>
+    
+    <div class="container-main">
+        <div class="hero">
+            <h1>NexaSuite</h1>
+            <p>The integrated creative environment combining precision tools with intuitive design. Streamline your workflow across text, media, and data manipulation.</p>
             
-            <div class="feature" style="animation-delay: 0.4s">
-                <h3>🎨 Image Editor</h3>
-                <p>Professional-grade photo editing with AI enhancements and creative filters</p>
-                <a href="./Photo-Editor/index.html" class="btn-custom">Edit Images</a>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value">15K+</div>
+                    <div class="stat-label">Daily Users</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">98%</div>
+                    <div class="stat-label">Satisfaction</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">4.9★</div>
+                    <div class="stat-label">Rating</div>
+                </div>
             </div>
-            
-            <div class="feature" style="animation-delay: 0.6s">
-                <h3>📦 File Compressor</h3>
-                <p>Smart compression algorithms that maintain quality while reducing file sizes</p>
-                <a href="./Huffman_Compressor/index.html" class="btn-custom">Compress Now</a>
+        </div>
+
+        <div class="tool-grid">
+            <div class="tool-card">
+                <div class="tool-badge">New</div>
+                <div class="tool-icon">📝</div>
+                <h3>Smart Text Editor</h3>
+                <p>AI-powered writing assistant with real-time collaboration and version control</p>
+                <a href="./textEditor.html" class="btn btn-primary">Launch Editor</a>
             </div>
-            
-            <div class="feature" style="animation-delay: 0.8s">
-                <h3>🎮 Play Game</h3>
-                <p>Curated selection of immersive games to boost creativity and relaxation</p>
-                <a href="./Snake Game/index.html" class="btn-custom">Play Now</a>
+
+            <div class="tool-card">
+                <div class="tool-icon">🎨</div>
+                <h3>Image Studio</h3>
+                <p>Professional-grade photo editing with neural filters and batch processing</p>
+                <a href="./Photo-Editor/index.html" class="btn btn-primary">Start Creating</a>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-badge">Pro</div>
+                <div class="tool-icon">📦</div>
+                <h3>File Optimizer</h3>
+                <p>Intelligent compression algorithms with format conversion and cloud sync</p>
+                <a href="./Huffman_Compressor/index.html" class="btn btn-primary">Optimize Now</a>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-icon">🎮</div>
+                <h3>Play Arena</h3>
+                <p>Curated selection of brain-training games and creative challenges</p>
+                <a href="./Snake Game/index.html" class="btn btn-primary">Start Playing</a>
             </div>
         </div>
     </div>
+
+    <script>
+        // Add intersection observer for scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        document.querySelectorAll('.tool-card').forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+            observer.observe(card);
+        });
+    </script>
 </body>
 </html>
