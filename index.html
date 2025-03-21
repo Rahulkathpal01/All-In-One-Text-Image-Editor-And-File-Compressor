@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALL IN ONE - Creative Toolkit</title>
+    <title>All In One - Creative Toolkit</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
@@ -200,7 +200,6 @@
             }
         }
 
-        /* Dynamic Interaction Additions */
         .tool-card:nth-child(odd):hover {
             background: linear-gradient(45deg, var(--overlay), #f8f9fa);
         }
@@ -225,8 +224,8 @@
     
     <div class="container-main">
         <div class="hero">
-            <h1>NexaSuite</h1>
-            <p>The integrated creative environment combining precision tools with intuitive design. Streamline your workflow across text, media, and data manipulation.</p>
+            <h1>All In One</h1>
+            <p>The ultimate integrated environment combining precision tools with intuitive design. Streamline your workflow across text, media, and data manipulation.</p>
             
             <div class="stats-bar">
                 <div class="stat-item">
@@ -278,19 +277,63 @@
     </div>
 
     <script>
-        // Add intersection observer for scroll animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = 1;
-                    entry.target.style.transform = 'translateY(0)';
-                }
+        // Scroll Animation Controller
+        const animateOnScroll = () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.tool-card').forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                observer.observe(card);
             });
+
+            // Animate stats bar
+            const statsBar = document.querySelector('.stats-bar');
+            if (statsBar) {
+                observer.observe(statsBar);
+            }
+        };
+
+        // Hover Effect Enhancer
+        const enhanceHoverEffects = () => {
+            document.querySelectorAll('.tool-card').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                });
+            });
+        };
+
+        // Initialize all animations
+        window.addEventListener('DOMContentLoaded', () => {
+            animateOnScroll();
+            enhanceHoverEffects();
+            
+            // Add loading animation
+            document.body.style.opacity = '1';
+            document.body.style.transition = 'opacity 0.5s ease';
         });
 
-        document.querySelectorAll('.tool-card').forEach((card, index) => {
-            card.style.animationDelay = `${index * 0.1}s`;
-            observer.observe(card);
+        // Mobile Touch Support
+        document.querySelectorAll('.tool-card').forEach(card => {
+            card.addEventListener('touchstart', () => {
+                card.classList.add('hover-effect');
+            });
+            
+            card.addEventListener('touchend', () => {
+                setTimeout(() => {
+                    card.classList.remove('hover-effect');
+                }, 500);
+            });
         });
     </script>
 </body>
