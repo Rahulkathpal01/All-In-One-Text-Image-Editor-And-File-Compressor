@@ -3,223 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huffman Visualizer</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet>
+    <title>Huffman Text File Compressor</title>
     <style>
         :root {
-            --primary: #2A2356;
-            --secondary: #483D8B;
-            --accent: #00CED1;
-            --highlight: #FF69B4;
-            --text: #F8F8FF;
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --background: #ecf0f1;
+            --error: #e74c3c;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: var(--text);
-            min-height: 100vh;
-        }
-
-        .navbar {
-            background: rgba(42, 35, 86, 0.9) !important;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--accent);
-        }
-
-        #container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
+            font-family: Arial, sans-serif;
+            background: var(--background);
+            margin: 0;
             padding: 2rem;
-            max-width: 1200px;
-            margin: 2rem auto;
         }
 
-        .text_box {
-            background: rgba(72, 61, 139, 0.3);
-            border-radius: 15px;
-            padding: 1.5rem;
-            height: 60vh;
-            transition: all 0.3s ease;
-            border: 1px solid transparent;
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
 
-        .text_box:hover {
-            border-color: var(--accent);
-            box-shadow: 0 8px 25px rgba(0, 206, 209, 0.2);
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 1.5rem;
         }
 
         .drop-zone {
-            border: 2px dashed var(--accent);
-            border-radius: 15px;
+            border: 2px dashed var(--primary);
             padding: 2rem;
             text-align: center;
-            transition: all 0.3s ease;
-            margin: 1rem auto;
-            max-width: 400px;
-        }
-
-        .drop-zone.dragover {
-            background: rgba(0, 206, 209, 0.1);
-            transform: scale(1.02);
-        }
-
-        .btn-custom {
-            background: linear-gradient(45deg, var(--accent), var(--highlight));
-            border: none;
-            border-radius: 8px;
-            padding: 12px 30px;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
-        .btn-custom:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 206, 209, 0.4);
-        }
-
-        .progress-ring {
-            width: 120px;
-            height: 120px;
-            margin: 1rem auto;
-        }
-
-        .tree-node {
-            fill: var(--accent);
+            margin: 1rem 0;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .tree-node:hover {
-            fill: var(--highlight);
-            transform: scale(1.1);
+        .drop-zone:hover {
+            background: rgba(52, 152, 219, 0.1);
+            border-color: var(--secondary);
         }
 
-        .stats-card {
-            background: rgba(72, 61, 139, 0.5);
-            border-radius: 10px;
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
             padding: 1rem;
+            margin: 1rem 0;
+            color: #856404;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .stat-box {
+            background: var(--background);
+            padding: 1rem;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin: 0.5rem 0;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        #errorMessage {
+            color: var(--error);
+            text-align: center;
             margin: 1rem 0;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-light">
-        <span class="navbar-brand mb-0 h1">🌿 Huffman Visualizer</span>
-    </nav>
-
-    <div id="container">
-        <!-- Visualization Panel -->
-        <div class="text_box">
-            <div class="drop-zone" id="dropZone">
-                📁 Drag & Drop Files or Click to Upload
-                <input type="file" id="uploadedFile" hidden>
-            </div>
-            <svg id="treeVisualization" width="100%" height="80%"></svg>
+    <div class="container">
+        <h1>Huffman Text File Compressor</h1>
+        
+        <!-- File Drop Zone -->
+        <div class="drop-zone" id="dropZone">
+            📂 Drag & Drop Text Files Here or Click to Upload
+            <input type="file" id="fileInput">
         </div>
 
-        <!-- Info Panel -->
-        <div class="text_box">
-            <div class="stats-card">
-                <h5>📈 Compression Stats</h5>
-                <div id="compressionStats"></div>
+        <!-- Warning Message -->
+        <div class="warning">
+            ⚠️ This tool is optimized for <strong>text-based files</strong> (e.g., .txt, .csv, .json). 
+            It does not support binary files like PDFs, images, or videos.
+        </div>
+
+        <!-- Text Input Section -->
+        <h2>Or Enter Text Directly</h2>
+        <textarea id="textInput" placeholder="Type or paste your text here..."></textarea>
+
+        <!-- Stats Display -->
+        <div class="stats">
+            <div class="stat-box">
+                <h3>Original Size</h3>
+                <span id="originalSize">0 KB</span>
             </div>
-            <div class="stats-card">
-                <h5>⏳ Recent Operations</h5>
-                <div id="operationHistory"></div>
+            <div class="stat-box">
+                <h3>Compressed Size</h3>
+                <span id="compressedSize">0 KB</span>
             </div>
-            <div class="text-center">
-                <button class="btn btn-custom my-2" id="encode">Encode</button>
-                <button class="btn btn-custom my-2" id="decode">Decode</button>
+            <div class="stat-box">
+                <h3>Compression Ratio</h3>
+                <span id="compressionRatio">0%</span>
             </div>
         </div>
+
+        <!-- Action Buttons -->
+        <button id="compressBtn">Compress</button>
+        <button id="decompressBtn">Decompress</button>
+
+        <!-- Error Message -->
+        <div id="errorMessage"></div>
     </div>
 
     <script>
-        // Drag & Drop Handling
+        // File Validation
+        const allowedTypes = [
+            'text/plain', 
+            'application/json', 
+            'text/csv'
+        ];
+
+        function validateFile(file) {
+            if (!allowedTypes.includes(file.type)) {
+                document.getElementById('errorMessage').textContent =
+                    'Unsupported file type. Please upload a text-based file.';
+                return false;
+            }
+            document.getElementById('errorMessage').textContent = '';
+            return true;
+        }
+
+        // File Drop Zone
         const dropZone = document.getElementById('dropZone');
-        const fileInput = document.getElementById('uploadedFile');
+        const fileInput = document.getElementById('fileInput');
 
         dropZone.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (validateFile(file)) {
+                console.log('File selected:', file);
+                // Add file processing logic here
+            }
+        });
+
         dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
-            dropZone.classList.add('dragover');
+            dropZone.style.backgroundColor = 'rgba(52, 152, 219, 0.1)';
         });
-        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.backgroundColor = 'transparent';
+        });
+
         dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
-            dropZone.classList.remove('dragover');
-            fileInput.files = e.dataTransfer.files;
+            dropZone.style.backgroundColor = 'transparent';
+            const file = e.dataTransfer.files[0];
+            if (validateFile(file)) {
+                console.log('File dropped:', file);
+                // Add file processing logic here
+            }
         });
 
-        // Tree Visualization
-        function drawTree(data) {
-            const svg = d3.select("#treeVisualization");
-            svg.selectAll("*").remove();
+        // Text Input Compression
+        const textInput = document.getElementById('textInput');
+        const compressBtn = document.getElementById('compressBtn');
+        const decompressBtn = document.getElementById('decompressBtn');
 
-            const treeLayout = d3.tree().size([600, 400]);
-            const root = d3.hierarchy(data);
-            treeLayout(root);
-
-            const nodes = svg.selectAll(".node")
-                .data(root.descendants())
-                .enter().append("g")
-                .attr("class", "node")
-                .attr("transform", d => `translate(${d.x},${d.y})`);
-
-            nodes.append("circle")
-                .attr("class", "tree-node")
-                .attr("r", 10);
-
-            nodes.append("text")
-                .text(d => d.data.name)
-                .attr("dx", 15)
-                .attr("dy", 5)
-                .style("fill", "white");
-
-            const links = svg.selectAll(".link")
-                .data(root.links())
-                .enter().append("path")
-                .attr("class", "link")
-                .attr("d", d3.linkVertical()
-                    .x(d => d.x)
-                    .y(d => d.y))
-                .style("fill", "none")
-                .style("stroke", "var(--accent)");
-        }
-
-        // Progress Animation
-        function updateProgress(percent) {
-            const circle = document.querySelector('.progress-ring__circle');
-            const radius = circle.r.baseVal.value;
-            const circumference = radius * 2 * Math.PI;
-            
-            circle.style.strokeDasharray = `${circumference} ${circumference}`;
-            circle.style.strokeDashoffset = circumference - (percent / 100) * circumference;
-        }
-
-        // Event Listeners
-        document.getElementById('encode').addEventListener('click', async () => {
-            // Add encoding logic here
-            updateProgress(75); // Example progress
+        compressBtn.addEventListener('click', () => {
+            const text = textInput.value;
+            if (!text) {
+                document.getElementById('errorMessage').textContent =
+                    'Please enter some text to compress.';
+                return;
+            }
+            console.log('Compressing text:', text);
+            // Add compression logic here
         });
 
-        document.getElementById('decode').addEventListener('click', async () => {
-            // Add decoding logic here
-            updateProgress(50); // Example progress
-        });
-
-        // Initial Demo Tree
-        drawTree({
-            name: "Root",
-            children: [
-                { name: "Child 1", children: [{ name: "Leaf 1" }, { name: "Leaf 2" }] },
-                { name: "Child 2", children: [{ name: "Leaf 3" }] }
-            ]
+        decompressBtn.addEventListener('click', () => {
+            const text = textInput.value;
+            if (!text) {
+                document.getElementById('errorMessage').textContent =
+                    'Please enter some text to decompress.';
+                return;
+            }
+            console.log('Decompressing text:', text);
+            // Add decompression logic here
         });
     </script>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
 </body>
 </html>
